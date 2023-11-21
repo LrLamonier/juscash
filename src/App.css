@@ -38,6 +38,10 @@ input:focus {
   outline: 2px solid var(--cor-principal);
 }
 
+input.erro-input {
+  outline: 2px solid #ff0000;
+}
+
 .secao-form {
   padding-top: 10rem;
   margin: 0 auto;
@@ -79,6 +83,10 @@ form span {
   color: #ff0000;
 }
 
+form span > span {
+  font-size: 0.8rem;
+}
+
 .link-conta {
   font-size: 0.9rem;
   width: 100%;
@@ -94,4 +102,24 @@ form span {
   width: fit-content;
   border-radius: 8px;
   align-self: center;
+}
+
+nav button {
+  color: var(--cor-principal);
+}
+
+.senha-container {
+  position: relative;
+}
+
+.botao-senha {
+  position: absolute;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-38%);
+}
+
+.p-senha {
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
 }

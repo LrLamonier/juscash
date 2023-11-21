@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
-import Home from "../pages/Home";
 
 import { Provider } from "react-redux";
 
@@ -10,10 +9,10 @@ export default function LayoutGlobal() {
   return (
     <>
       <Provider store={store}>
-        <body style={{ minHeight: "100vh" }}>
+        <div style={{ minHeight: "100vh" }}>
           <NavBar />
           <Outlet />
-        </body>
+        </div>
       </Provider>
     </>
   );
