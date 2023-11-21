@@ -1,14 +1,32 @@
-import { useSelector } from "react-redux";
-import "./NavBar.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { RootState } from "../store/store";
-import acessoLS from "../utils/acessoLS";
+import { logout } from "../store/slices/sliceUsuario";
+import { fazerLogout } from "../utils/acessoLS";
+import "./NavBar.css";
 
 export default function NavBar() {
   const usuarioLogado = useSelector((state: RootState) => state.logado);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // const logout = acessoLS("logado");
+  const desconectar = async () => {
+    try {
+      await fazerLogout();
+    } catch {}
+    dispatch(logout);
+    navigate("/");
+  };
 
   return (
-    <nav>{usuarioLogado ? <button>Sair</button> : <button>Entrar</button>}</nav>
+    <nav>
+      <div>
+        {usuarioLogado ? (
+          <button onClick={desconectar}>Sair</button>
+        ) : (
+          <button onClick={() => navigate("/login")}>Entrar</button>
+        )}
+      </div>
+    </nav>
   );
 }

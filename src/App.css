@@ -7,44 +7,91 @@
 
 #root {
   font-family: "Roboto", sans-serif;
+  --cor-principal: #072854;
+  --cor-confirma: #2cbd62;
+}
+
+body {
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+main {
+  width: 100%;
 }
 
 button {
   cursor: pointer;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+input {
+  display: block;
+  outline: 2px solid #cccccc;
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 1.1rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+input:focus {
+  outline: 2px solid var(--cor-principal);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.secao-form {
+  padding-top: 10rem;
+  margin: 0 auto;
+  max-width: 25rem;
+  color: var(--cor-principal);
+  font-weight: 500;
 }
 
-.card {
-  padding: 2em;
+.secao-container {
+  padding: 1.6rem 2.4rem;
 }
 
-.read-the-docs {
-  color: #888;
+#logo {
+  display: block;
+  margin: 0 auto;
+  width: 70%;
+}
+
+.secao-container > form {
+  margin-top: 2.8rem;
+}
+
+.grupo-input {
+  margin-bottom: 0.4rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+form span {
+  color: #ff0000;
+}
+
+.link-conta {
+  font-size: 0.9rem;
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  margin: 0.3rem 0 2rem 0;
+}
+
+.botao-confirma {
+  color: #ffffff;
+  background-color: var(--cor-confirma);
+  padding: 0.8rem 1rem;
+  width: fit-content;
+  border-radius: 8px;
+  align-self: center;
 }

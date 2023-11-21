@@ -166,3 +166,7 @@ function cadastro({
 
   return { status: 200, message: "Usuário cadastrado com sucesso.", usuario };
 }
+
+export async function fazerLogout() {
+  return { status: 200 };
+}
