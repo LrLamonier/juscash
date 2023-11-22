@@ -7,8 +7,10 @@
 
 #root {
   font-family: "Roboto", sans-serif;
-  --cor-principal: #072854;
+  --cor-primaria: #072854;
+  --cor-secundaria: #2798ba;
   --cor-confirma: #2cbd62;
+  --cor-cinza: #cccccc;
 }
 
 body {
@@ -28,14 +30,14 @@ button {
 
 input {
   display: block;
-  outline: 2px solid #cccccc;
+  outline: 2px solid var(--cor-cinza);
   width: 100%;
   padding: 8px 10px;
   font-size: 1.1rem;
 }
 
 input:focus {
-  outline: 2px solid var(--cor-principal);
+  outline: 2px solid var(--cor-primaria);
 }
 
 input.erro-input {
@@ -46,7 +48,7 @@ input.erro-input {
   padding-top: 10rem;
   margin: 0 auto;
   max-width: 25rem;
-  color: var(--cor-principal);
+  color: var(--cor-primaria);
   font-weight: 500;
 }
 
@@ -105,7 +107,7 @@ form span > span {
 }
 
 nav button {
-  color: var(--cor-principal);
+  color: var(--cor-primaria);
 }
 
 .senha-container {
@@ -122,4 +124,26 @@ nav button {
 .p-senha {
   margin-top: 0.4rem;
   font-size: 0.9rem;
+}
+
+nav {
+  padding: 1.2rem 2.4rem;
+  width: 100%;
+  position: fixed;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 1.2rem;
+}
+
+nav > img {
+  max-height: 1.2rem;
+}
+
+.botao-form {
+  color: #ffffff;
+  background-color: var(--cor-secundaria);
+  padding: 0.8rem 1rem;
+  width: fit-content;
+  border-radius: 8px;
+  align-self: center;
 }

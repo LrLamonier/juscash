@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import LayoutGlobal from "./components/LayoutGlobal";
 
 import "./App.css";
+import Leads from "./pages/Leads";
+import ModalLead from "./components/ModalLead";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +16,14 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "leads",
+        element: <ModalLead />,
+      },
+      {
+        path: "*",
+        // element: <NaoEncontrado />,
       },
     ],
   },

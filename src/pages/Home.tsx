@@ -104,6 +104,8 @@ export default function Home() {
       emailRef.current?.focus();
       return;
     }
+
+    navigate("/leads");
   };
 
   return (

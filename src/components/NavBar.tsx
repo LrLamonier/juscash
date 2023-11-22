@@ -5,6 +5,8 @@ import { logout } from "../store/slices/sliceUsuario";
 import { fazerLogout } from "../utils/acessoLS";
 import "./NavBar.css";
 
+import logo from "../assets/logo-white.svg";
+
 export default function NavBar() {
   const usuarioLogado = useSelector((state: RootState) => state.logado);
   const dispatch = useDispatch();
