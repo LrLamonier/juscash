@@ -5,8 +5,6 @@ import { logout } from "../store/slices/sliceUsuario";
 import { fazerLogout } from "../utils/acessoLS";
 import "./NavBar.css";
 
-import logo from "../assets/logo-white.svg";
-
 export default function NavBar() {
   const usuarioLogado = useSelector((state: RootState) => state.logado);
   const dispatch = useDispatch();
@@ -20,13 +18,17 @@ export default function NavBar() {
     navigate("/");
   };
 
+  const irParaLogin = () => {
+    navigate("/?log=in");
+  };
+
   return (
     <nav>
       <div>
         {usuarioLogado ? (
           <button onClick={desconectar}>Sair</button>
         ) : (
-          <button onClick={() => navigate("/login")}>Entrar</button>
+          <button onClick={irParaLogin}>Entrar</button>
         )}
       </div>
     </nav>

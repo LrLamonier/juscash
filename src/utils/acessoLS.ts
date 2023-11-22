@@ -48,7 +48,7 @@ export default async function acessoLS(
     usuario = usuarios.find((user) => user.email === request.email);
   }
 
-  if ("status" in request) {
+  if ("emailUsuario" in request) {
     return lead({ usuario, request });
   }
 
@@ -56,7 +56,7 @@ export default async function acessoLS(
     return cadastro({ usuario, request });
   }
 
-  return login({ usuario, request });
+  return login({ usuario, request, isNew: false });
 }
 
 function lead({
@@ -134,13 +134,19 @@ function lead({
   };
 }
 
-function login({
+async function login({
   usuario,
   request,
+  isNew,
 }: {
   usuario: Usuario | undefined;
   request: Login;
+  isNew: boolean;
 }) {
+  if (isNew) {
+    return { status: 200, usuario, message: "Usuário cadastrado com sucesso." };
+  }
+
   if (!usuario) {
     return { status: 404, message: "Usuário não encontrado." };
   }
@@ -152,7 +158,7 @@ function login({
   return { status: 200, usuario };
 }
 
-function cadastro({
+async function cadastro({
   usuario,
   request,
 }: {
@@ -160,7 +166,7 @@ function cadastro({
   request: Usuario;
 }) {
   if (usuario) {
-    return { status: 400, message: "Usuário já cadastardo." };
+    return { status: 400, message: "Usuário já cadastrado." };
   }
 
   const usuarios = getLocal<Usuario>("usuarios");
@@ -168,7 +174,7 @@ function cadastro({
 
   localStorage.setItem("usuarios", JSON.stringify(novosUsuarios));
 
-  return { status: 200, message: "Usuário cadastrado com sucesso.", usuario };
+  return await login({ usuario: undefined, request, isNew: true });
 }
 
 export async function fazerLogout() {
