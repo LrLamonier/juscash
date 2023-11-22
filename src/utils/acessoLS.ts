@@ -28,11 +28,19 @@ export interface Usuario extends Login {
   nome: string;
 }
 
+function getLocal<T>(chave: string): T[] {
+  const local = localStorage.getItem(chave);
+  let arr: T[] = [];
+  if (local) {
+    arr = JSON.parse(local);
+  }
+  return arr;
+}
+
 export default async function acessoLS(
   request: Login | Usuario | DadosLead | Lead
 ) {
-  const local = localStorage.getItem("usuarios");
-  const usuarios: Usuario[] = JSON.parse(local || "") || [];
+  const usuarios = getLocal<Usuario>("usuarios");
   let usuario: Usuario | undefined;
   if ("emailUsuario" in request) {
     usuario = usuarios.find((user) => user.email === request.emailUsuario);
@@ -62,9 +70,7 @@ function lead({
     return { status: 401, message: "Usuário não conectado." };
   }
 
-  const leadsAtuais: Lead[] =
-    JSON.parse(localStorage.getItem("leads") || "") || [];
-
+  const leadsAtuais = getLocal<Lead>("leads");
   if ("id" in request === false) {
     const novaLead: Lead = {
       ...request,
@@ -157,9 +163,7 @@ function cadastro({
     return { status: 400, message: "Usuário já cadastardo." };
   }
 
-  const usuarios: Usuario[] =
-    JSON.parse(localStorage.getItem("usuarios") || "") || [];
-
+  const usuarios = getLocal<Usuario>("usuarios");
   const novosUsuarios = [request, ...usuarios];
 
   localStorage.setItem("usuarios", JSON.stringify(novosUsuarios));

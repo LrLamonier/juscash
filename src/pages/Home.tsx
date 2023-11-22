@@ -1,49 +1,117 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import isEmail from "validator/lib/isEmail";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
-
-import logo from "../assets/logo-white.svg";
+import acessoLS from "../utils/acessoLS";
 
 import "./Home.css";
+import logo from "../assets/logo-white.svg";
 
 type Fn = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
 
 export default function Home() {
+  const navigate = useNavigate();
+
   const nomeRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const senhaRef = useRef<HTMLInputElement>(null);
   const confirmaRef = useRef<HTMLInputElement>(null);
 
   const erroNome = useState(false);
-  const erroEmail = useState(false);
+  const erroEmail = useState<false | string>(false);
   const erroSenha = useState(false);
   const erroConfirm = useState(false);
 
   const [senhaVisivel, setSenhaVisivel] = useState(false);
   const [confirmVisivel, setConfirmVisivel] = useState(false);
 
-  const resetarCampo = (erro: Fn) => {
-    console.log(erro[0]);
+  const resetarErro = (erro: Fn) => {
     if (!erro[0]) {
       return;
     }
     erro[1](false);
   };
 
-  const submitCriarConta = (e: React.FormEvent) => {
+  const submitCriarConta = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // const [nome, email, senha, confirma] = (dados.target)
+    erroNome[1](false);
+    erroEmail[1](false);
+    erroSenha[1](false);
+    erroConfirm[1](false);
+
+    const nome = nomeRef.current?.value;
+    const email = emailRef.current?.value;
+    const senha = senhaRef.current?.value;
+    const confirma = confirmaRef.current?.value;
+
+    let erro;
+
+    if (!nome || nome.length > 30) {
+      erroNome[1](true);
+      erro = nomeRef;
+    }
+
+    if (!email || !isEmail(email)) {
+      erroEmail[1]("Email inválido.");
+      if (!erro) {
+        erro = emailRef;
+      }
+    }
+
+    const letras = /[a-z]/i;
+    const numeros = /[0-9]/;
+    const simbolos = /[-#!$@£%^&*()_+|~=`{}\[\]:";'<>?,.\/]/;
+
+    if (
+      !senha ||
+      !letras.test(senha) ||
+      !numeros.test(senha) ||
+      !simbolos.test(senha)
+    ) {
+      erroSenha[1](true);
+      erroConfirm[1](true);
+      if (!erro) {
+        erro = senhaRef;
+      }
+    }
+
+    if (!confirma || confirma !== senha) {
+      erroConfirm[1](true);
+      if (!erro) {
+        erro = confirmaRef;
+      }
+    }
+
+    if (erro) {
+      erro.current?.focus();
+      return;
+    }
+
+    const resposta = await acessoLS({
+      nome: nome!,
+      email: email!,
+      senha: senha!,
+    });
+
+    console.log(resposta);
+
+    if (resposta.status === 400) {
+      erroEmail[1]("Email já cadastrado.");
+      if (emailRef.current) {
+        emailRef.current.value = "";
+      }
+      emailRef.current?.focus();
+      return;
+    }
   };
 
   return (
     <main>
       <section className="secao-form">
         <div className="secao-container">
-          {/* logo */}
           <img id="logo" src={logo} />
 
-          {/* form */}
           <form onSubmit={submitCriarConta}>
             <div className="grupo-input">
               <label htmlFor="criarNome">
@@ -58,12 +126,12 @@ export default function Home() {
                 minLength={4}
                 maxLength={30}
                 className={erroNome[0] ? "erro-input" : ""}
-                onChange={() => resetarCampo(erroNome)}
+                onChange={() => resetarErro(erroNome)}
               />
             </div>
             <div className="grupo-input">
               <label htmlFor="criarEmail">
-                Email: <span>* {erroEmail[0] ? "Email inválido." : ""} </span>
+                Email: <span>* {!erroEmail[0] ? "" : erroEmail[0]} </span>
               </label>
               <input
                 ref={emailRef}
@@ -73,7 +141,7 @@ export default function Home() {
                 minLength={4}
                 maxLength={30}
                 className={erroEmail[0] ? "erro-input" : ""}
-                onChange={() => resetarCampo(erroEmail)}
+                onChange={() => resetarErro(erroEmail as Fn)}
               />
             </div>
             <div className="grupo-input">
@@ -89,7 +157,7 @@ export default function Home() {
                   minLength={4}
                   maxLength={30}
                   className={erroSenha[0] ? "erro-input" : ""}
-                  onChange={() => resetarCampo(erroSenha)}
+                  onChange={() => resetarErro(erroSenha)}
                 />
                 <button
                   className="botao-senha"
@@ -119,7 +187,7 @@ export default function Home() {
                   minLength={4}
                   maxLength={30}
                   className={erroConfirm[0] ? "erro-input" : ""}
-                  onChange={() => resetarCampo(erroConfirm)}
+                  onChange={() => resetarErro(erroConfirm)}
                 />
                 <button
                   className="botao-senha"
