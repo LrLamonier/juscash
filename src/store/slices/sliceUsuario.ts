@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Usuario } from "../../utils/acessoLS";
 
-const logadoInicial: Usuario | null = null;
+const logadoInicial: { usuario: Usuario | null } = { usuario: null };
 
 function loginFn(state: typeof logadoInicial, action: PayloadAction<Usuario>) {
-  if (!state || !action.payload) {
+  if (!action.payload) {
     return;
   }
-  state = action.payload;
+  state.usuario = action.payload;
 }
 
-function logoutFn() {
-  return null;
+function logoutFn(state: typeof logadoInicial) {
+  state.usuario = logadoInicial.usuario;
 }
 
 const logadoSlice = createSlice({

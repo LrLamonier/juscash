@@ -12,11 +12,11 @@ export interface DadosLead {
   email: string;
   telefone: string;
   oportunidades: Oportunidades;
-  status: "Cliente Potencial" | "Dados Confirmados" | "Análise do Lead";
 }
 
 export interface Lead extends DadosLead {
   id: number;
+  status: "Cliente Potencial" | "Dados Confirmados" | "Análise do Lead";
 }
 
 export interface Login {
@@ -27,6 +27,11 @@ export interface Login {
 export interface Usuario extends Login {
   nome: string;
 }
+
+export type Consulta = {
+  emailAutor: string;
+  id?: number;
+};
 
 function getLocal<T>(chave: string): T[] {
   const local = localStorage.getItem(chave);
@@ -98,7 +103,7 @@ function lead({
   }
 
   const statusAtual = status.findIndex((st) => st === leadAlvo.status);
-  const novoStatus = status.findIndex((st) => st === request.status);
+  const novoStatus = status.findIndex((st) => st === (request as Lead).status);
 
   if (statusAtual === novoStatus) {
     return { status: 200, message: "Lead não alterada." };
@@ -107,13 +112,13 @@ function lead({
   if (statusAtual > novoStatus) {
     return {
       status: 400,
-      message: "Não é possível regredir o status de uma lead.",
+      message: "Não é possível retornar uma lead a um status anterior.",
     };
   }
 
   const novaLead: Lead = {
     ...leadAlvo,
-    status: request.status,
+    status: (request as Lead).status,
   };
 
   const novasLeads: Lead[] = [

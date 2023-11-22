@@ -7,6 +7,7 @@ import LayoutGlobal from "./components/LayoutGlobal";
 import "./App.css";
 import Leads from "./pages/Leads";
 import ModalLead from "./components/ModalLead";
+import FormLogin from "./components/FormLogin";
 
 const router = createBrowserRouter([
   {
@@ -30,11 +31,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return (
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
