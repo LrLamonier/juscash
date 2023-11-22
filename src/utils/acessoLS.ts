@@ -43,17 +43,22 @@ function getLocal<T>(chave: string): T[] {
 }
 
 export default async function acessoLS(
-  request: Login | Usuario | DadosLead | Lead
+  request: Login | Usuario | DadosLead | Lead | Consulta
 ) {
   const usuarios = getLocal<Usuario>("usuarios");
   let usuario: Usuario | undefined;
-  if ("emailUsuario" in request) {
+  if ("emailAutor" in request) {
+    request.emailAutor = request.emailAutor.toLowerCase();
+    usuario = usuarios.find((user) => user.email === request.emailAutor);
+  } else if ("emailUsuario" in request) {
+    request.emailUsuario = request.emailUsuario.toLowerCase();
     usuario = usuarios.find((user) => user.email === request.emailUsuario);
   } else {
+    request.email = request.email.toLowerCase();
     usuario = usuarios.find((user) => user.email === request.email);
   }
 
-  if ("emailUsuario" in request) {
+  if ("emailUsuario" in request || "emailAutor" in request) {
     return lead({ usuario, request });
   }
 
@@ -69,13 +74,23 @@ function lead({
   request,
 }: {
   usuario: Usuario | undefined;
-  request: Lead | DadosLead;
+  request: Lead | DadosLead | Consulta;
 }) {
   if (!usuario) {
     return { status: 401, message: "Usuário não conectado." };
   }
 
   const leadsAtuais = getLocal<Lead>("leads");
+
+  if ("emailAutor" in request) {
+    const ih = getLocal<Lead>("leads").filter(
+      (lead) => lead.emailUsuario === request.emailAutor
+    );
+    return getLocal<Lead>("leads").filter(
+      (lead) => lead.emailUsuario === request.emailAutor
+    ) as Lead[];
+  }
+
   if ("id" in request === false) {
     const novaLead: Lead = {
       ...request,

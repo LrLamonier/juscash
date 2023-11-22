@@ -20,7 +20,7 @@ const router = createBrowserRouter([
       },
       {
         path: "leads",
-        element: <ModalLead />,
+        element: <Leads />,
       },
       {
         path: "*",

@@ -2,13 +2,17 @@ import { useRef, useState } from "react";
 import { Link, SetURLSearchParams, useNavigate } from "react-router-dom";
 import isEmail from "validator/lib/isEmail";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
-import acessoLS from "../utils/acessoLS";
+import acessoLS, { Usuario } from "../utils/acessoLS";
 
 import logo from "../assets/logo-white.svg";
 import { useDispatch } from "react-redux";
 import { login } from "../store/slices/sliceUsuario";
 
 type Fn = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+type ResLogin = {
+  status: number;
+  usuario: Usuario;
+};
 
 export default function FormLogin({
   setSearch,
@@ -89,9 +93,7 @@ export default function FormLogin({
       return;
     }
 
-    console.log(resposta);
-
-    if (resposta.status === 404) {
+    if (((resposta as ResLogin).status as number) === 404) {
       erroEmail[1]("Email não cadastrado.");
       if (emailRef.current && senhaRef.current) {
         emailRef.current.value = "";
@@ -101,7 +103,7 @@ export default function FormLogin({
       return;
     }
 
-    if (resposta.status === 401) {
+    if (((resposta as ResLogin).status as number) === 401) {
       erroSenha[1]("Senha incorreta.");
       if (senhaRef.current) {
         senhaRef.current.value = "";
