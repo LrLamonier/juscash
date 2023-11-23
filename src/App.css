@@ -231,7 +231,8 @@ form h2:not(:first-of-type) {
 }
 
 .leads-slot {
-  width: 33%;
+  /* width: 33%; */
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -244,7 +245,7 @@ form h2:not(:first-of-type) {
 
 .leads-slot button {
   height: 90%;
-  width: 95%;
+  width: 30%;
   background-color: var(--cor-cinza-claro);
   text-align: center;
   border: 1px solid var(--cor-cinza-escuro);
