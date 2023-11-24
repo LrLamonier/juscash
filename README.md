@@ -12,10 +12,10 @@
 
 ### Sumário
 
-- [1 - Otimização de SEO](#1-otimização-de-seo)
-- [2 - Quickstart](#2-quickstart)
-- [3 - Considerações gerais](#3-considerações-gerais)
-    - [3.1 - Back end](#31-back-end)
+- [1 - Otimização de SEO](#1---otimização-de-seo)
+- [2 - Quickstart](#2---quickstart)
+- [3 - Considerações gerais](#3---considerações-gerais)
+    - [3.1 - Back end](#31---back-end)
     - [3.2 - Validação dos formulários](#32---validação-dos-formulários)
     - [3.3 - Autenticação](#33---autenticação)
     - [3.4 - Funcionalidades](#34---funcionalidades)
@@ -78,3 +78,7 @@ A funcionalidade de arrastar e soltas os leads foi implementado de uma forma que
 Quando o usuário solta o lead no slot disponível, aparece um modal de confirmação que exibe o nome, status atual e o status seguinte.
 
 ![Modal de confirmação](./readme/08-confirmacao.png)
+
+---
+
+[Voltar para o topo](#processo-seletivo---juscash)
