@@ -25,27 +25,32 @@ const leadsLoader = async () => {
   return leads;
 };
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      element: <LayoutGlobal />,
+      path: "/",
+      children: [
+        {
+          index: true,
+          element: <Home />,
+        },
+        {
+          path: "leads",
+          loader: leadsLoader,
+          element: <Leads />,
+        },
+        {
+          path: "*",
+          element: <Home />,
+        },
+      ],
+    },
+  ],
   {
-    element: <LayoutGlobal />,
-    path: "/",
-    children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: "leads",
-        loader: leadsLoader,
-        element: <Leads />,
-      },
-      {
-        path: "*",
-        element: <Home />,
-      },
-    ],
-  },
-]);
+    basename: "/juscash",
+  }
+);
 
 function App() {
   return <RouterProvider router={router} />;
