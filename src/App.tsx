@@ -48,7 +48,7 @@ const router = createBrowserRouter(
     },
   ],
   {
-    basename: "/juscash",
+    basename: "/juscash/",
   }
 );
 
