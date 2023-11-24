@@ -176,6 +176,7 @@ export default function FormSignUp({
                 onChange={() => resetarErro(erroSenha)}
               />
               <button
+                type="button"
                 className="botao-senha"
                 onClick={() => setSenhaVisivel((state) => !state)}
               >
@@ -206,6 +207,7 @@ export default function FormSignUp({
                 onChange={() => resetarErro(erroConfirm)}
               />
               <button
+                type="button"
                 className="botao-senha"
                 onClick={() => setConfirmVisivel((state) => !state)}
               >

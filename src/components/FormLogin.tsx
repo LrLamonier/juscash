@@ -155,6 +155,7 @@ export default function FormLogin({
                 onChange={() => resetarErro(erroSenha as Fn)}
               />
               <button
+                type="button"
                 className="botao-senha"
                 onClick={() => setSenhaVisivel((state) => !state)}
               >

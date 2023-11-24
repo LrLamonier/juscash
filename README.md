@@ -7,12 +7,29 @@
 
 ### Sumário
 
-[1. Quickstart](#1-quickstart)
-2. Instalação
+- [1. Otimização de SEO](#1-otimização-de-seo)
+- [2. Quickstart](#2-quickstart)
+- [3. Considerações gerais](#3-considerações-gerais)
+    - [3.1 Back end](#31-back-end)
 
 ---
 
-### 1. Quickstart
+#### 1. Otimização de SEO
+
+Com o objetivo de impulsionar a presença online da aplicação nos mecanismos de busca, utilizei, além das tags meta no `<head>`, tags específicas do [Open Graph Protocol](https://ogp.me/) e de geração de [cards do Twitter](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup). Essas tags permitem que informações personalizadas sobre a página sejam exibidas quando o link é compartilhado. As imagens abaixo são prévias de como o link aparece quando compartilhado em diversas redes sociais.
+
+| Rede social | Screenshot do card |
+| --- | --- |
+| WhatsApp | ![WhatsApp](./readme/01-whatsapp.png) |
+| Instagram | ![Instagram](./readme/02-instagram.png) |
+| Facebook (desktop / mobile) | ![Facebook](./readme/03-facebook.png) |
+| Twitter (à esquerda, as duas variações possíveis em desktop, à direita as variações para mobile) | ![Twitter](./readme/04-twitter.png) | 
+|LinkedIn | ![LinkedIn](./readme/06-linkedin.png) |
+| Discord | ![Discord](./readme/05-discord.png) |
+
+---
+
+### 2. Quickstart
 
 Este projeto foi desenvolvido com React, TypeScript e [Vite](https://vitejs.dev/). Para rodar o projeto localmente:
 
@@ -24,14 +41,18 @@ Este projeto foi desenvolvido com React, TypeScript e [Vite](https://vitejs.dev/
 
 ---
 
-### 2. Otimização
+### 3. Considerações gerais
 
-#### 2.1 SEO
-
-Com o objetivo de impulsionar a presença online da aplicação nos mecanismos de busca, utilizei, além das tags meta no `<head>`, tags específicas do [Open Graph Protocol](https://ogp.me/) e de geração de [cards do Twitter](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup). Essas tags permitem que informações personalizadas sobre a página sejam exibidas quando o link é compartilhado. As imagens abaixo são prévias de como o link aparece quando compartilhado em diversas redes sociais.
-
-#### 2.2 "Back end"
+#### 3.1 Back end
 
 Nas orientações do teste constam apenas as telas de criação de conta, dos leads do usuário e o modal de criação/exibição de lead. Utilizando o `localstorage` como "back end", implementei também a funcionalidade de login e persistência dos leads por usuário.
 
 Para isso, criei funções básicas que simulam o comportamento de um back end e estabelecendo uma camada entre a aplicação e o `localstorage`/banco de dados.
+
+#### 3.2 Validação dos formulários
+
+Para garantir uma experiência de usuário eficaz, os campos dos formulários são validados individualmente. Os campos com erro ficam destacados e o usuário é notificado sobre o que aconteceu. Ao tentar criar uma conta com um email já cadastrado, por exemplo, o erro especifica que o email já está em uso.
+
+Outra característica importante é que, ao interagir com um campo marcado como erro, a marcação desaparece, reforçando para o usuário que foi feita uma alteração. Tal situação pode ser observada nas imagens a seguir.
+
+![Formulário com erro](./readme/07-form.png)
