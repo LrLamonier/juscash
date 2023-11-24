@@ -112,8 +112,6 @@ export default function FormSignUp({
       return;
     }
 
-    console.log(resposta);
-
     if ((resposta as { status: number }).status === 400) {
       erroEmail[1]("Email já cadastrado.");
       if (emailRef.current) {

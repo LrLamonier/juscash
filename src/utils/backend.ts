@@ -101,7 +101,11 @@ function lead({
 
     localStorage.setItem("leads", JSON.stringify(leadsAtuais));
 
-    return { status: 201, leadsAtualizados: leadsAtuais };
+    const leadsUsuario = leadsAtuais.filter(
+      (l) => l.emailUsuario === request.emailUsuario
+    );
+
+    return { status: 201, leadsAtualizados: leadsUsuario };
   }
 
   const status = ["Cliente Potencial", "Dados Confirmados", "Análise do Lead"];
