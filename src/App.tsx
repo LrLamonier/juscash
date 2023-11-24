@@ -1,13 +1,9 @@
-import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { store } from "./store/store";
-import Home from "./pages/Home";
 import LayoutGlobal from "./components/LayoutGlobal";
+import Home from "./pages/Home";
+import Leads from "./pages/Leads";
 
 import "./App.css";
-import Leads from "./pages/Leads";
-import ModalLead from "./components/ModalLead";
-import FormLogin from "./components/FormLogin";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +20,7 @@ const router = createBrowserRouter([
       },
       {
         path: "*",
-        // element: <NaoEncontrado />,
+        element: <p>asdf</p>,
       },
     ],
   },

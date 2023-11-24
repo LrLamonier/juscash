@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { SetURLSearchParams, useNavigate } from "react-router-dom";
 import isEmail from "validator/lib/isEmail";
-import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import acessoLS from "../utils/acessoLS";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 import logo from "../assets/logo-white.svg";
 
@@ -111,7 +111,7 @@ export default function FormSignUp({
 
     console.log(resposta);
 
-    if (resposta.status === 400) {
+    if ((resposta as { status: number }).status === 400) {
       erroEmail[1]("Email já cadastrado.");
       if (emailRef.current) {
         emailRef.current.value = "";

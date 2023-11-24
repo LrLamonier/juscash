@@ -14,7 +14,7 @@ export interface DadosLead {
   oportunidades: Oportunidades;
 }
 
-export interface Lead extends DadosLead {
+export interface TLead extends DadosLead {
   id: number;
   status: "Cliente Potencial" | "Dados Confirmados" | "Análise do Lead";
 }
@@ -43,7 +43,7 @@ function getLocal<T>(chave: string): T[] {
 }
 
 export default async function acessoLS(
-  request: Login | Usuario | DadosLead | Lead | Consulta
+  request: Login | Usuario | DadosLead | TLead | Consulta
 ) {
   const usuarios = getLocal<Usuario>("usuarios");
   let usuario: Usuario | undefined;
@@ -74,25 +74,25 @@ function lead({
   request,
 }: {
   usuario: Usuario | undefined;
-  request: Lead | DadosLead | Consulta;
+  request: TLead | DadosLead | Consulta;
 }) {
   if (!usuario) {
     return { status: 401, message: "Usuário não conectado." };
   }
 
-  const leadsAtuais = getLocal<Lead>("leads");
+  const leadsAtuais = getLocal<TLead>("leads");
 
   if ("emailAutor" in request) {
-    const ih = getLocal<Lead>("leads").filter(
+    const ih = getLocal<TLead>("leads").filter(
       (lead) => lead.emailUsuario === request.emailAutor
     );
-    return getLocal<Lead>("leads").filter(
+    return getLocal<TLead>("leads").filter(
       (lead) => lead.emailUsuario === request.emailAutor
-    ) as Lead[];
+    ) as TLead[];
   }
 
   if ("id" in request === false) {
-    const novaLead: Lead = {
+    const novaLead: TLead = {
       ...request,
       id: Math.floor(Math.random() * 10_000),
       status: "Cliente Potencial",
@@ -110,7 +110,7 @@ function lead({
   const leadAlvo = leadsAtuais.find(
     (lead) =>
       lead.emailUsuario === request.emailUsuario &&
-      lead.id === (request as Lead).id
+      lead.id === (request as TLead).id
   );
 
   if (!leadAlvo) {
@@ -118,7 +118,7 @@ function lead({
   }
 
   const statusAtual = status.findIndex((st) => st === leadAlvo.status);
-  const novoStatus = status.findIndex((st) => st === (request as Lead).status);
+  const novoStatus = status.findIndex((st) => st === (request as TLead).status);
 
   if (statusAtual === novoStatus) {
     return { status: 200, message: "Lead não alterada." };
@@ -131,16 +131,16 @@ function lead({
     };
   }
 
-  const novaLead: Lead = {
+  const novaLead: TLead = {
     ...leadAlvo,
-    status: (request as Lead).status,
+    status: (request as TLead).status,
   };
 
-  const novasLeads: Lead[] = [
+  const novasLeads: TLead[] = [
     novaLead,
     ...leadsAtuais.filter(
       (lead) =>
-        lead.id !== (request as Lead).id &&
+        lead.id !== (request as TLead).id &&
         lead.emailUsuario !== request.emailUsuario
     ),
   ];

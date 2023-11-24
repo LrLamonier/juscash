@@ -1,97 +1,144 @@
-// import { FaPlus } from "react-icons/fa6";
-// import logo from "../assets/logo-white.svg";
-// import { useSearchParams } from "react-router-dom";
-
-// export default function Leads() {
-//   const [search, setSearch] = useSearchParams();
-
-//   return (
-//     <main>
-//       <section className="secao-lead">
-//         <div className="secao-container">
-//           <div className="img-margem">
-//             <img id="logo" src={logo} />
-//           </div>
-
-//           <div className="leads-container">
-//             <button className="botao-secundario botao-secundario-direita">
-//               <FaPlus /> Novo Lead
-//             </button>
-
-//             <div className="tabela-leads"></div>
-//           </div>
-//         </div>
-//       </section>
-//     </main>
-//   );
-// }
-
-import { FaPlus } from "react-icons/fa6";
-import logo from "../assets/logo-white.svg";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import acessoLS, { Lead } from "../utils/acessoLS";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { getLeads, limparLeads } from "../store/slices/sliceLead";
+import { TLead } from "../utils/acessoLS";
+import { FaPlus } from "react-icons/fa6";
 import TabelaLeads from "../components/TabelaLeads";
+import ModalLead from "../components/ModalLead";
+
+import logo from "../assets/logo-white.svg";
 
 export default function Leads() {
+  const leads: TLead[] = [
+    {
+      id: 1234,
+      emailUsuario: "lucas@lucas.com",
+      nome: "Lucas Lamonier",
+      email: "teste1@teste.com",
+      telefone: "62981814141",
+      oportunidades: {
+        todos: false,
+        honoSucumbenciais: false,
+        honoContra: true,
+        honoDativos: true,
+        creditoAutor: false,
+      },
+      status: "Dados Confirmados",
+    },
+    {
+      id: 4321,
+      emailUsuario: "lucas@lucas.com",
+      nome: "Gustavo Melo",
+      email: "teste2@teste.com",
+      telefone: "62981814141",
+      oportunidades: {
+        todos: true,
+        honoSucumbenciais: true,
+        honoContra: true,
+        honoDativos: true,
+        creditoAutor: true,
+      },
+      status: "Cliente Potencial",
+    },
+    {
+      id: 5555,
+      emailUsuario: "lucas@lucas.com",
+      nome: "Arthur Ribeiro",
+      email: "teste3@teste.com",
+      telefone: "6291919191",
+      oportunidades: {
+        todos: false,
+        honoSucumbenciais: false,
+        honoContra: false,
+        honoDativos: false,
+        creditoAutor: false,
+      },
+      status: "Análise do Lead",
+    },
+  ];
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [search, setSearch] = useSearchParams();
-  const [leads, setLeads] = useState<Lead[] | null>([]);
+  const [params, setParams] = useSearchParams();
+  // const [leads, setLeads] = useState<TLead[] | null>([]);
   const usuarioLogado = useSelector((state: RootState) => state.logado);
 
+  const modalRef = useRef<HTMLDialogElement | null>(null);
+
+  const [leadAtivo, setLeadAtivo] = useState<TLead | null>(null);
+
+  const mostrar = params.get("lead");
+
+  // useEffect(() => {
+  //   if (usuarioLogado.usuario === null) {
+  //     return navigate("/");
+  //   }
+  // }, []);
+
   useEffect(() => {
-    const usuario = usuarioLogado.usuario;
-    if (!usuario) {
-      return navigate("/");
+    const mostrar = params.get("lead");
+
+    if (!modalRef.current || !leads) {
+      return;
     }
 
-    const fetchLeadsUsuario = async () => {
-      try {
-        const resposta = await acessoLS({
-          emailAutor: usuario.email,
-        });
+    if (mostrar && mostrar === "novo") {
+      setLeadAtivo(null);
+      document.body.style.overflow = "hidden";
+      modalRef.current.showModal();
+      return;
+    }
 
-        if (!resposta) {
-          setLeads(null);
-        }
-
-        dispatch(getLeads(resposta as Lead[]));
-
-        console.log(resposta);
-        return setLeads(resposta as Lead[]);
-      } catch {
-        setLeads(null);
+    if (mostrar && !isNaN(Number(mostrar))) {
+      const leadAlvo = leads.find((l) => l.id === Number(mostrar));
+      if (leadAlvo) {
+        console.log("achou alvo");
+        setLeadAtivo(leadAlvo);
+      } else {
+        console.log("não achou alvo");
+        setLeadAtivo(null);
       }
-      setLeads(null);
-    };
+      document.body.style.overflow = "hidden";
+      modalRef.current.showModal();
+      return;
+    }
 
-    fetchLeadsUsuario();
+    document.body.style.overflow = "unset";
+    modalRef.current.close();
+  }, [mostrar]);
 
-    return () => {
-      dispatch(limparLeads());
-    };
-    // eslint-disable-next-line
-  }, []);
+  const fecharModal = useCallback(() => {
+    setParams({});
+  }, [leads]);
+
+  const novoLead = () => {
+    setParams({
+      lead: "novo",
+    });
+  };
 
   return (
     <main>
+      <dialog ref={modalRef}>
+        <ModalLead leadAtivo={leadAtivo} fecharModal={fecharModal} />
+      </dialog>
       <section className="secao-lead">
         <div className="secao-container">
           <div className="img-margem">
             <img id="logo" src={logo} />
           </div>
-
           <div className="leads-container">
-            <button className="botao-secundario botao-secundario-direita">
+            <button
+              className="botao-secundario botao-secundario-direita"
+              onClick={novoLead}
+            >
               <FaPlus /> Novo Lead
             </button>
 
             <TabelaLeads leads={leads} />
           </div>
+          <div style={{ height: "5000px" }}></div>
         </div>
       </section>
     </main>

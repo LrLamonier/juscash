@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
-import { Link, SetURLSearchParams, useNavigate } from "react-router-dom";
+import { SetURLSearchParams, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import isEmail from "validator/lib/isEmail";
-import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { login } from "../store/slices/sliceUsuario";
 import acessoLS, { Usuario } from "../utils/acessoLS";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 import logo from "../assets/logo-white.svg";
-import { useDispatch } from "react-redux";
-import { login } from "../store/slices/sliceUsuario";
 
 type Fn = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
 type ResLogin = {

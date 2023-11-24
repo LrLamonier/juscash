@@ -1,9 +1,9 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import FormLogin from "../components/FormLogin";
-import FormSignUp from "../components/FormSignUp";
-import acessoLS from "../utils/acessoLS";
 import { useDispatch } from "react-redux";
 import { login } from "../store/slices/sliceUsuario";
+import acessoLS from "../utils/acessoLS";
+import FormLogin from "../components/FormLogin";
+import FormSignUp from "../components/FormSignUp";
 
 export default function Home() {
   const [search, setSearch] = useSearchParams();

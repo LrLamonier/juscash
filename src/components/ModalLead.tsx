@@ -1,13 +1,71 @@
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRef, useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import isEmail from "validator/lib/isEmail";
-import acessoLS, { DadosLead, Oportunidades } from "../utils/acessoLS";
-
-import logo from "../assets/logo-white.svg";
+import acessoLS, { DadosLead, Oportunidades, TLead } from "../utils/acessoLS";
 
 type Fn = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
 
-export default function ModalLead() {
+export default function ModalLead({
+  leadAtivo,
+  fecharModal,
+}: {
+  leadAtivo: TLead | null;
+  fecharModal: () => void;
+}) {
+  console.log("lead ativo no modallead", { leadAtivo });
+
+  const [params] = useSearchParams();
+  useEffect(() => {
+    erroNome[1](false);
+    erroEmail[1](false);
+    erroTelefone[1](false);
+
+    let oportunidades: Oportunidades = {
+      todos: true,
+      honoSucumbenciais: true,
+      honoContra: true,
+      honoDativos: true,
+      creditoAutor: true,
+    };
+
+    if (leadAtivo) {
+      oportunidades = { ...leadAtivo.oportunidades };
+    }
+
+    if (
+      todosRef.current &&
+      hoSucumRef.current &&
+      hoContraRef.current &&
+      hoDativosRef.current &&
+      credRef.current
+    ) {
+      todosRef.current.checked = oportunidades.todos;
+      hoSucumRef.current.checked = oportunidades.honoSucumbenciais;
+      hoContraRef.current.checked = oportunidades.honoContra;
+      hoDativosRef.current.checked = oportunidades.honoDativos;
+      credRef.current.checked = oportunidades.creditoAutor;
+    }
+
+    if (
+      leadAtivo &&
+      nomeRef.current &&
+      emailRef.current &&
+      telefoneRef.current
+    ) {
+      nomeRef.current.value = leadAtivo.nome;
+      emailRef.current.value = leadAtivo.email;
+      telefoneRef.current.value = leadAtivo.telefone;
+    }
+
+    return () => {
+      erroNome[1](false);
+      erroEmail[1](false);
+      erroTelefone[1](false);
+    };
+  }, [params, leadAtivo]);
+
+  const disabled = !!leadAtivo;
+
   const nomeRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const telefoneRef = useRef<HTMLInputElement>(null);
@@ -129,8 +187,12 @@ export default function ModalLead() {
     erro[1](false);
   };
 
-  const submitCriarConta = async (e: React.FormEvent) => {
+  async function submitSalvarLead(e: React.FormEvent) {
     e.preventDefault();
+
+    erroNome[1](false);
+    erroEmail[1](false);
+    erroTelefone[1](false);
 
     const nome = nomeRef.current?.value;
     const email = emailRef.current?.value;
@@ -190,152 +252,184 @@ export default function ModalLead() {
       console.log("Erro ao tentar registrar nova Lead.");
       return;
     }
-
-    console.log({ resposta });
-
-    // if resposta.status === 401 > retornar para página inicial
-
-    // if resposta.status === 20 > sucesso na criação da lead, fechar modal
-  };
+  }
 
   return (
-    <main>
-      <section className="secao-lead">
-        <div className="secao-container">
-          <form onSubmit={submitCriarConta}>
-            <h1>Novo Lead</h1>
+    <section
+      style={{
+        margin: "0 auto",
+        width: "20rem",
+        color: "#ffffff",
+        fontWeight: 500,
+        zIndex: 10,
+      }}
+    >
+      <div className="secao-container">
+        <form onSubmit={submitSalvarLead}>
+          <h1>Novo Lead</h1>
 
-            <h2>Dados do Lead</h2>
+          <h2>Dados do Lead</h2>
 
-            <div className="grupo-input">
-              <label htmlFor="nome-lead">
-                Nome completo:{" "}
-                <span>* {erroNome[0] ? "Nome inválido." : ""}</span>
-              </label>
-              <input
-                ref={nomeRef}
-                type="text"
-                id="nome-lead"
-                name="criar-nome"
-                minLength={4}
-                maxLength={30}
-                className={erroNome[0] ? "erro-input" : ""}
-                onChange={() => resetarErro(erroNome)}
-              />
-            </div>
+          <div className="grupo-input">
+            <label htmlFor="nome-lead">
+              Nome completo:{" "}
+              <span>* {erroNome[0] ? "Nome inválido." : ""}</span>
+            </label>
+            <input
+              ref={nomeRef}
+              type="text"
+              id="nome-lead"
+              name="criar-nome"
+              minLength={4}
+              maxLength={30}
+              className={erroNome[0] ? "erro-input" : ""}
+              onChange={() => resetarErro(erroNome)}
+              disabled={disabled}
+              style={{ backgroundColor: disabled ? "#dddddd" : "" }}
+            />
+          </div>
 
-            <div className="grupo-input">
-              <label htmlFor="telefoneLead">
-                Email: <span>* {erroEmail[0] ? "Email inválido." : ""}</span>
-              </label>
-              <input
-                ref={emailRef}
-                type="text"
-                id="emailLead"
-                name="email-lead"
-                minLength={4}
-                maxLength={30}
-                className={erroEmail[0] ? "erro-input" : ""}
-                onChange={() => resetarErro(erroEmail)}
-              />
-            </div>
+          <div className="grupo-input">
+            <label htmlFor="telefoneLead">
+              Email: <span>* {erroEmail[0] ? "Email inválido." : ""}</span>
+            </label>
+            <input
+              ref={emailRef}
+              type="text"
+              id="emailLead"
+              name="email-lead"
+              minLength={4}
+              maxLength={30}
+              className={erroEmail[0] ? "erro-input" : ""}
+              onChange={() => resetarErro(erroEmail)}
+              disabled={disabled}
+              style={{ backgroundColor: disabled ? "#dddddd" : "" }}
+            />
+          </div>
 
-            <div className="grupo-input">
-              <label htmlFor="telefoneLead">
-                Telefone:{" "}
-                <span>* {erroTelefone[0] ? "Telefone inválido." : ""}</span>
-              </label>
-              <input
-                ref={telefoneRef}
-                type="text"
-                id="telefoneLead"
-                name="telefone-lead"
-                minLength={4}
-                maxLength={30}
-                className={erroTelefone[0] ? "erro-input" : ""}
-                onChange={telefoneOnChange}
-              />
-            </div>
+          <div className="grupo-input">
+            <label htmlFor="telefoneLead">
+              Telefone:{" "}
+              <span>* {erroTelefone[0] ? "Telefone inválido." : ""}</span>
+            </label>
+            <input
+              ref={telefoneRef}
+              type="text"
+              id="telefoneLead"
+              name="telefone-lead"
+              minLength={4}
+              maxLength={30}
+              className={erroTelefone[0] ? "erro-input" : ""}
+              onChange={telefoneOnChange}
+              disabled={disabled}
+              style={{ backgroundColor: disabled ? "#dddddd" : "" }}
+            />
+          </div>
 
-            <h2>Oportunidades</h2>
+          <h2>Oportunidades</h2>
 
-            <div className="grupo-input grupo-oportunidades">
-              <input
-                ref={todosRef}
-                type="checkbox"
-                value="todos"
-                defaultChecked
-                id="sucumbenciaisLead"
-                name="sucumbenciais-lead"
-                onChange={checkOnChange}
-              />
-              <label htmlFor="sucumbenciaisLead">Todos</label>
-            </div>
+          <div className="grupo-input grupo-oportunidades">
+            <input
+              ref={todosRef}
+              type="checkbox"
+              value="todos"
+              id="sucumbenciaisLead"
+              name="sucumbenciais-lead"
+              onChange={checkOnChange}
+              disabled={disabled}
+            />
+            <label htmlFor="sucumbenciaisLead">Todos</label>
+          </div>
 
-            <div className="grupo-input grupo-oportunidades">
-              <input
-                ref={hoSucumRef}
-                type="checkbox"
-                value="sucumbenciais"
-                defaultChecked
-                id="dativosLead"
-                name="contratuais-lead"
-                minLength={4}
-                maxLength={30}
-                onChange={checkOnChange}
-              />
-              <label htmlFor="oportunidadesLead">Honorários Contratuais</label>
-            </div>
+          <div className="grupo-input grupo-oportunidades">
+            <input
+              ref={hoSucumRef}
+              type="checkbox"
+              value="sucumbenciais"
+              id="dativosLead"
+              name="contratuais-lead"
+              minLength={4}
+              maxLength={30}
+              onChange={checkOnChange}
+              disabled={disabled}
+            />
+            <label htmlFor="oportunidadesLead">Honorários Contratuais</label>
+          </div>
 
-            <div className="grupo-input grupo-oportunidades">
-              <input
-                ref={hoContraRef}
-                type="checkbox"
-                value="contratuais"
-                defaultChecked
-                id="contratuaisLead"
-                name="contratuais-lead"
-                minLength={4}
-                maxLength={30}
-                onChange={checkOnChange}
-              />
-              <label htmlFor="contratuaisLead">Honorários Contratuais</label>
-            </div>
+          <div className="grupo-input grupo-oportunidades">
+            <input
+              ref={hoContraRef}
+              type="checkbox"
+              value="contratuais"
+              id="contratuaisLead"
+              name="contratuais-lead"
+              minLength={4}
+              maxLength={30}
+              onChange={checkOnChange}
+              disabled={disabled}
+            />
+            <label htmlFor="contratuaisLead">Honorários Contratuais</label>
+          </div>
 
-            <div className="grupo-input grupo-oportunidades">
-              <input
-                ref={hoDativosRef}
-                type="checkbox"
-                value="dativos"
-                defaultChecked
-                id="dativosLead"
-                name="dativos-lead"
-                minLength={4}
-                maxLength={30}
-                onChange={checkOnChange}
-              />
-              <label htmlFor="dativosLead">Honorários Dativos</label>
-            </div>
+          <div className="grupo-input grupo-oportunidades">
+            <input
+              ref={hoDativosRef}
+              type="checkbox"
+              value="dativos"
+              id="dativosLead"
+              name="dativos-lead"
+              minLength={4}
+              maxLength={30}
+              onChange={checkOnChange}
+              disabled={disabled}
+            />
+            <label htmlFor="dativosLead">Honorários Dativos</label>
+          </div>
 
-            <div className="grupo-input grupo-oportunidades">
-              <input
-                ref={credRef}
-                type="checkbox"
-                value="credito"
-                defaultChecked
-                id="creditoLead"
-                name="credito-lead"
-                minLength={4}
-                maxLength={30}
-                onChange={checkOnChange}
-              />
-              <label htmlFor="creditoLead">Crédito do Autor</label>
-            </div>
+          <div className="grupo-input grupo-oportunidades">
+            <input
+              ref={credRef}
+              type="checkbox"
+              value="credito"
+              id="creditoLead"
+              name="credito-lead"
+              minLength={4}
+              maxLength={30}
+              onChange={checkOnChange}
+              disabled={disabled}
+            />
+            <label htmlFor="creditoLead">Crédito do Autor</label>
+          </div>
 
-            <button className="botao-secundario">Criar conta</button>
-          </form>
-        </div>
-      </section>
-    </main>
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              gap: "15px",
+              justifyContent: "flex-end",
+            }}
+          >
+            <button
+              onClick={fecharModal}
+              className="botao-secundario"
+              type="button"
+            >
+              Cancelar
+            </button>
+
+            <button
+              className="botao-secundario"
+              style={{
+                backgroundColor: !!leadAtivo ? "#aaaaaa" : "",
+                cursor: disabled ? "not-allowed" : "pointer",
+              }}
+              disabled={!!leadAtivo}
+            >
+              Salvar
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
   );
 }

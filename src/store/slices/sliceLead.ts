@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Lead } from "../../utils/acessoLS";
+import { TLead } from "../../utils/acessoLS";
 
-const leadsIniciais: Lead[] = [];
+const leadsIniciais: TLead[] = [];
 
 function getLeadsFn(
   state: typeof leadsIniciais,
-  action: PayloadAction<Lead[]>
+  action: PayloadAction<TLead[]>
 ) {
   return action.payload;
 }

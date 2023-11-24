@@ -1,214 +1,256 @@
-// //
-// import {
-//   DndContext,
-//   useDroppable,
-//   useDraggable,
-//   DragEndEvent,
-// } from "@dnd-kit/core";
-// import { useSearchParams } from "react-router-dom";
-// import { Lead } from "../utils/acessoLS";
-// import { useState } from "react";
-
-// export default function TabelaLeads({ leads }: { leads: Lead[] | null }) {
-//   //   const leads: LeadLista[] = [
-//   //     { nome: "Lucas Ramos Lamonier", id: 1234 },
-//   //     { nome: "Gustavo Cândido de Oliveira Melo", id: 1221 },
-//   //   ];
-
-//   function onDragEnd(e: DragEndEvent) {
-//     if (e.over && e.over.id === "droppable") {
-//       setIsDropped(true);
-//     }
-//   }
-
-//   const [isDropped, setIsDropped] = useState<boolean>(false);
-
-//   return (
-//     <div className="tabela-leads">
-//       <DndContext onDragEnd={(e) => onDragEnd(e)}>
-//         <div className="leads-linha">
-//           <div className="leads-slot leads-header">Cliente Potencial</div>
-//           <div className="leads-slot leads-header">
-//             <h1>Dados Confirmados</h1>
-//           </div>
-//           <div className="leads-slot leads-header">
-//             <h1>Análise do Lead</h1>
-//           </div>
-//         </div>
-//         {/* {!leads
-//           ? "não foi possível acessar os leads"
-//           : leads.length === 0
-//           ? "nenhum lead encontrado"
-//           : leads.map((lead, i) => (
-//               <LinhaLead
-//                 key={"lead-" + i}
-//                 idx={i}
-//                 nome={lead.nome}
-//                 id={lead.id}
-//                 status={lead.status}
-//               />
-//             ))} */}
-//         <LinhaLead
-//           idx={0}
-//           nome="Lucas"
-//           id={1234}
-//           status="Dados Confirmados"
-//           onDragEnd={onDragEnd}
-//         />
-//       </DndContext>
-//     </div>
-//   );
-// }
-
-// function LinhaLead({
-//   idx,
-//   nome,
-//   id,
-//   status,
-//   onDragEnd,
-// }: {
-//   idx: number;
-//   nome: string;
-//   id: number;
-//   status: "Cliente Potencial" | "Dados Confirmados" | "Análise do Lead";
-//   onDragEnd: (e: DragEndEvent) => void;
-// }) {
-//   const [params, setParams] = useSearchParams();
-
-//   const nomeDisplay = nome.length < 36 ? nome : nome.slice(0, 36);
-
-//   const statusDisponiveis = [
-//     "Cliente Potencial",
-//     "Dados Confirmados",
-//     "Análise do Lead",
-//   ];
-//   const statusNum = statusDisponiveis.findIndex((s) => s === status);
-
-//   const { isOver, setNodeRef } = useDroppable({ id: "droppable" });
-//   const style: React.CSSProperties = {
-//     backgroundColor: isOver ? "green" : "fuchsia",
-//   };
-
-//   const [dropped, setIsDropped] = useState(null);
-
-//   // id: "ihihih-0001",
-
-//   return (
-//     <>
-//       {!dropped ? <Draggable /> : ""}
-//       <div
-//         style={style}
-//         className={`leads-linha ${idx % 2 === 0 ? "leads-linha-conteudo" : ""}`}
-//       >
-//         {dropped ? <Draggable /> : ""}
-//       </div>
-//     </>
-//   );
-// }
-
-// function Draggable() {
-//   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-//     id: "draggable",
-//   });
-
-//   const style = transform
-//     ? {
-//         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-//       }
-//     : undefined;
-
-//   return (
-//     <div
-//       className="leads-slot"
-//       ref={setNodeRef}
-//       style={style}
-//       {...listeners}
-//       {...attributes}
-//     >
-//       <button>ih IH</button>
-//     </div>
-//   );
-// }
-//
-import {
-  DndContext,
-  useDroppable,
-  useDraggable,
-  DragEndEvent,
-  DragOverEvent,
-  DragStartEvent,
-} from "@dnd-kit/core";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Lead } from "../utils/acessoLS";
-import { useState } from "react";
+import { useDrag, useDrop, DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { TLead } from "../utils/acessoLS";
+import { MdOutlineDragIndicator } from "react-icons/md";
 
-export default function TabelaLeads({ leads }: { leads: Lead[] | null }) {
-  const [coords, setCoords] = useState<number[] | undefined>(undefined);
-
-  const draggableMarkup = <Draggable coords={coords}>ih ih</Draggable>;
-
-  const handleDragEnd = (e: DragEndEvent) => {
-    console.log(e);
-
-    if (e.over && e.over.id === "droppable") {
-      setCoords([e.delta.x, e.delta.y]);
-    }
-  };
-
-  const handleDragStart = (e: DragStartEvent) => {
-    console.log(e);
-    https://github.com/clauderic/dnd-kit/blob/6f762a4d8d0ea047c9e9ba324448d4aca258c6a0/stories/1%20-%20Core/Draggable/1-Draggable.story.tsx#L55
-  };
-
+export default function TabelaLeads({ leads }: { leads: TLead[] | null }) {
   return (
-    <div>
-      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        {!coords ? draggableMarkup : null}
-        <Droppable>{coords ? draggableMarkup : "Drop here!"}</Droppable>
-      </DndContext>
+    <div className="tabela-leads">
+      <div className="leads-linha">
+        <div className="leads-slot leads-header">Cliente Potencial</div>
+        <div className="leads-slot leads-header">
+          <h1>Dados Confirmados</h1>
+        </div>
+        <div className="leads-slot leads-header">
+          <h1>Análise do Lead</h1>
+        </div>
+      </div>
+      <DndProvider backend={HTML5Backend}>
+        {!leads ? (
+          <div
+            className={`leads-linha`}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <p style={{ textAlign: "center" }}>
+              Não foi possível obter os leads.
+              <br />
+              Tente novamente mais tarde.
+            </p>
+          </div>
+        ) : leads.length === 0 ? (
+          <div
+            className={`leads-linha`}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <p style={{ textAlign: "center" }}>
+              Nenhum lead encontrado
+              <br />
+              para este usuário.
+            </p>
+          </div>
+        ) : (
+          leads.map((l, i) => {
+            return (
+              <LinhaLead
+                key={"l-lead-" + i}
+                idx={i}
+                nome={l.nome}
+                id={l.id}
+                status={l.status}
+              />
+            );
+          })
+        )}
+      </DndProvider>
     </div>
   );
 }
 
-function Droppable({ children }: { children: React.ReactNode }) {
-  const { isOver, setNodeRef } = useDroppable({ id: "droppable" });
-  const style: React.CSSProperties = {
-    backgroundColor: isOver ? "green" : "yellowgreen",
-    width: "500px",
-    height: "500px",
-  };
-  return (
-    <div ref={setNodeRef} style={style}>
-      {children}
-    </div>
-  );
-}
-
-function Draggable({
-  coords,
-  children,
+function LinhaLead({
+  idx,
+  nome,
+  id,
+  status,
 }: {
-  coords: number[] | undefined;
-  children: React.ReactNode;
+  idx: number;
+  nome: string;
+  id: number;
+  status: "Cliente Potencial" | "Dados Confirmados" | "Análise do Lead";
 }) {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: "draggable",
-  });
+  const statusDisponiveis = [
+    "Cliente Potencial",
+    "Dados Confirmados",
+    "Análise do Lead",
+  ];
+  const statusNum = statusDisponiveis.findIndex((s) => s === status);
 
-  const style: React.CSSProperties = {
-    transform: transform
-      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-      : coords
-      ? `translate3d(${coords[0]}px, ${coords[1]}px, 0)`
-      : "",
-    height: "25px",
-    width: "150px",
-    backgroundColor: "fuchsia",
-  };
+  const [num, setNum] = useState(statusNum);
 
   return (
-    <button ref={setNodeRef} style={style} {...listeners} {...attributes}>
+    <div
+      className={`leads-linha ${
+        idx % 2 === 0 ? "leads-linha-conteudo-impar" : ""
+      }`}
+    >
+      <LeadSlot id={id} num={0} setNum={setNum}>
+        {num === 0 ? <Lead id={id} status={num} nome={nome} /> : null}
+      </LeadSlot>
+      <LeadSlot id={id} num={1} setNum={setNum}>
+        {num === 1 ? <Lead id={id} status={num} nome={nome} /> : null}
+      </LeadSlot>
+      <LeadSlot id={id} num={2} setNum={setNum}>
+        {num === 2 ? <Lead id={id} status={num} nome={nome} /> : null}
+      </LeadSlot>
+    </div>
+  );
+}
+
+function LeadSlot({
+  style,
+  children,
+  setNum,
+  num,
+  id,
+}: {
+  style?: React.CSSProperties;
+  children?: React.ReactNode;
+  setNum: React.Dispatch<React.SetStateAction<number>>;
+  num: number;
+  id: number;
+}) {
+  let accept: string | string[];
+  if (num === 0) {
+    accept = "nope";
+  } else if (num === 1) {
+    accept = "lead-id-" + id + "-status-0";
+  } else {
+    accept = "lead-id-" + id + "-status-1";
+  }
+
+  const [{ isOver, canDrop }, drop] = useDrop(
+    () => ({
+      accept,
+      drop: () => {
+        setNum(num);
+      },
+      collect: (monitor) => ({
+        isOver: !!monitor.isOver(),
+        canDrop: !!monitor.canDrop(),
+      }),
+    }),
+    []
+  );
+
+  let backgroundColor = "";
+  if (canDrop && isOver) {
+    backgroundColor = "#2cbd62";
+  } else if (canDrop) {
+    backgroundColor = "#2798ba";
+  }
+
+  return (
+    <div
+      ref={drop}
+      className="leads-slot"
+      style={{
+        backgroundColor,
+        ...style,
+      }}
+    >
       {children}
-    </button>
+    </div>
+  );
+}
+
+function Lead({
+  id,
+  nome,
+  status,
+}: {
+  id: number;
+  nome: string;
+  status: number;
+}) {
+  const [, setParams] = useSearchParams();
+  const abrirModal = () => {
+    setParams({
+      lead: String(id),
+    });
+  };
+
+  const [, drag, preview] = useDrag(
+    () => ({
+      type: "lead-id-" + id + "-status-" + status,
+    }),
+    []
+  );
+
+  const [called, setCalled] = useState(false);
+  useEffect(() => {
+    if (!called) {
+      setCalled(true);
+    }
+  }, []);
+
+  if (!called) {
+    return null;
+  }
+
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        opacity: 1,
+      }}
+    >
+      <div
+        ref={preview}
+        style={{
+          width: "97%",
+          height: "90%",
+          justifyContent: "space-between",
+          display: "flex",
+          alignItems: "center",
+          borderRadius: "5px",
+          border: "1px solid #444444",
+          cursor: "pointer",
+        }}
+      >
+        <p
+          style={{
+            backgroundColor: "transparent",
+            border: "none",
+            height: "100%",
+            flexGrow: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onClick={abrirModal}
+        >
+          {nome}
+        </p>
+        <div
+          ref={drag}
+          style={{
+            cursor: "grab",
+            border: "none",
+            height: "100%",
+            width: "17%",
+            flexGrow: "auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderLeft: "1px solid #bbbbbb",
+          }}
+        >
+          <MdOutlineDragIndicator style={{ pointerEvents: "none" }} />
+        </div>
+      </div>
+    </div>
   );
 }
