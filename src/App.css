@@ -56,7 +56,7 @@ input.erro-input {
   margin: 0 auto;
   max-width: 40rem;
   color: var(--cor-primaria);
-  font-weight: 500;
+  /* font-weight: 500; */
 }
 
 .secao-container {

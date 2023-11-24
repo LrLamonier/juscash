@@ -165,11 +165,11 @@ export default function FormLogin({
 
           <div className="link-conta">
             <button onClick={irCriarConta} type="button">
-              Não possui conta? Criar conta.
+              Não possui conta? Criar uma.
             </button>
           </div>
 
-          <button className="botao-confirma">Criar conta</button>
+          <button className="botao-confirma">Entrar</button>
         </form>
       </div>
     </section>

@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { TLead } from "../utils/acessoLS";
+import acessoLS, { TLead } from "../utils/acessoLS";
 import { FaPlus } from "react-icons/fa6";
 import TabelaLeads from "../components/TabelaLeads";
 import ModalLead from "../components/ModalLead";
@@ -10,71 +10,72 @@ import ModalLead from "../components/ModalLead";
 import logo from "../assets/logo-white.svg";
 
 export default function Leads() {
-  const leads: TLead[] = [
-    {
-      id: 1234,
-      emailUsuario: "lucas@lucas.com",
-      nome: "Lucas Lamonier",
-      email: "teste1@teste.com",
-      telefone: "62981814141",
-      oportunidades: {
-        todos: false,
-        honoSucumbenciais: false,
-        honoContra: true,
-        honoDativos: true,
-        creditoAutor: false,
-      },
-      status: "Dados Confirmados",
-    },
-    {
-      id: 4321,
-      emailUsuario: "lucas@lucas.com",
-      nome: "Gustavo Melo",
-      email: "teste2@teste.com",
-      telefone: "62981814141",
-      oportunidades: {
-        todos: true,
-        honoSucumbenciais: true,
-        honoContra: true,
-        honoDativos: true,
-        creditoAutor: true,
-      },
-      status: "Cliente Potencial",
-    },
-    {
-      id: 5555,
-      emailUsuario: "lucas@lucas.com",
-      nome: "Arthur Ribeiro",
-      email: "teste3@teste.com",
-      telefone: "6291919191",
-      oportunidades: {
-        todos: false,
-        honoSucumbenciais: false,
-        honoContra: false,
-        honoDativos: false,
-        creditoAutor: false,
-      },
-      status: "Análise do Lead",
-    },
-  ];
+  // const leads: TLead[] = [
+  //   {
+  //     id: 1234,
+  //     emailUsuario: "lucas@lucas.com",
+  //     nome: "Lucas Lamonier",
+  //     email: "teste1@teste.com",
+  //     telefone: "62981814141",
+  //     oportunidades: {
+  //       todos: false,
+  //       honoSucumbenciais: false,
+  //       honoContra: true,
+  //       honoDativos: true,
+  //       creditoAutor: false,
+  //     },
+  //     status: "Dados Confirmados",
+  //   },
+  //   {
+  //     id: 4321,
+  //     emailUsuario: "lucas@lucas.com",
+  //     nome: "Gustavo Melo",
+  //     email: "teste2@teste.com",
+  //     telefone: "62981814141",
+  //     oportunidades: {
+  //       todos: true,
+  //       honoSucumbenciais: true,
+  //       honoContra: true,
+  //       honoDativos: true,
+  //       creditoAutor: true,
+  //     },
+  //     status: "Cliente Potencial",
+  //   },
+  //   {
+  //     id: 5555,
+  //     emailUsuario: "lucas@lucas.com",
+  //     nome: "Arthur Ribeiro",
+  //     email: "teste3@teste.com",
+  //     telefone: "6291919191",
+  //     oportunidades: {
+  //       todos: false,
+  //       honoSucumbenciais: false,
+  //       honoContra: false,
+  //       honoDativos: false,
+  //       creditoAutor: false,
+  //     },
+  //     status: "Análise do Lead",
+  //   },
+  // ];
+
+  const loaderLeads = useLoaderData();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   // const [leads, setLeads] = useState<TLead[] | null>([]);
+  const [leads, setLeads] = useState<TLead[] | null>([]);
   const usuarioLogado = useSelector((state: RootState) => state.logado);
 
   const modalRef = useRef<HTMLDialogElement | null>(null);
 
   const [leadAtivo, setLeadAtivo] = useState<TLead | null>(null);
 
-  const mostrar = params.get("lead");
+  useEffect(() => {
+    setLeads(loaderLeads as TLead[]);
+  }, []);
 
-  // useEffect(() => {
-  //   if (usuarioLogado.usuario === null) {
-  //     return navigate("/");
-  //   }
-  // }, []);
+  const mostrar = params.get("lead");
 
   useEffect(() => {
     const mostrar = params.get("lead");
@@ -108,9 +109,9 @@ export default function Leads() {
     modalRef.current.close();
   }, [mostrar]);
 
-  const fecharModal = useCallback(() => {
+  const fecharModal = () => {
     setParams({});
-  }, [leads]);
+  };
 
   const novoLead = () => {
     setParams({
@@ -121,7 +122,12 @@ export default function Leads() {
   return (
     <main>
       <dialog ref={modalRef}>
-        <ModalLead leadAtivo={leadAtivo} fecharModal={fecharModal} />
+        <ModalLead
+          leadAtivo={leadAtivo}
+          fecharModal={fecharModal}
+          emailUsuario={usuarioLogado.usuario?.email || ""}
+          setLeads={setLeads}
+        />
       </dialog>
       <section className="secao-lead">
         <div className="secao-container">
@@ -136,7 +142,7 @@ export default function Leads() {
               <FaPlus /> Novo Lead
             </button>
 
-            <TabelaLeads leads={leads} />
+            <TabelaLeads leads={leads} setLeads={setLeads} />
           </div>
           <div style={{ height: "5000px" }}></div>
         </div>

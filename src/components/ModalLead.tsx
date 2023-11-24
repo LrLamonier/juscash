@@ -4,16 +4,19 @@ import isEmail from "validator/lib/isEmail";
 import acessoLS, { DadosLead, Oportunidades, TLead } from "../utils/acessoLS";
 
 type Fn = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+type TResposta = { status: number; leadsAtualizados: TLead[] };
 
 export default function ModalLead({
   leadAtivo,
   fecharModal,
+  emailUsuario,
+  setLeads,
 }: {
   leadAtivo: TLead | null;
   fecharModal: () => void;
+  emailUsuario: string;
+  setLeads: React.Dispatch<React.SetStateAction<TLead[] | null>>;
 }) {
-  console.log("lead ativo no modallead", { leadAtivo });
-
   const [params] = useSearchParams();
   useEffect(() => {
     erroNome[1](false);
@@ -240,7 +243,7 @@ export default function ModalLead({
 
     try {
       resposta = await acessoLS({
-        emailUsuario: "lucas@lucasihih.com",
+        emailUsuario,
         nome: nome!,
         email: email!,
         telefone: telefone!,
@@ -252,6 +255,9 @@ export default function ModalLead({
       console.log("Erro ao tentar registrar nova Lead.");
       return;
     }
+
+    setLeads((resposta as TResposta).leadsAtualizados);
+    fecharModal();
   }
 
   return (
@@ -412,6 +418,11 @@ export default function ModalLead({
             <button
               onClick={fecharModal}
               className="botao-secundario"
+              style={{
+                backgroundColor: "transparent",
+                border: "1px solid #888888",
+                color: "#888888",
+              }}
               type="button"
             >
               Cancelar

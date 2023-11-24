@@ -216,7 +216,7 @@ export default function FormSignUp({
 
           <div className="link-conta">
             <button onClick={irLogin} type="button">
-              Já possui uma conta? Fazer o login
+              Já possui uma conta? Fazer login.
             </button>
           </div>
 

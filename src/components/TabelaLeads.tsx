@@ -1,11 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDrag, useDrop, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TLead } from "../utils/acessoLS";
 import { MdOutlineDragIndicator } from "react-icons/md";
+import ModalConfirma from "./ModalConfirma";
 
-export default function TabelaLeads({ leads }: { leads: TLead[] | null }) {
+export default function TabelaLeads({
+  leads,
+  setLeads,
+}: {
+  leads: TLead[] | null;
+  setLeads: React.Dispatch<React.SetStateAction<TLead[] | null>>;
+}) {
   return (
     <div className="tabela-leads">
       <div className="leads-linha">
@@ -57,6 +64,8 @@ export default function TabelaLeads({ leads }: { leads: TLead[] | null }) {
                 nome={l.nome}
                 id={l.id}
                 status={l.status}
+                emailUsuario={l.emailUsuario}
+                setLeads={setLeads}
               />
             );
           })
@@ -71,20 +80,26 @@ function LinhaLead({
   nome,
   id,
   status,
+  emailUsuario,
+  setLeads,
 }: {
   idx: number;
   nome: string;
   id: number;
   status: "Cliente Potencial" | "Dados Confirmados" | "Análise do Lead";
+  emailUsuario: string;
+  setLeads: React.Dispatch<React.SetStateAction<TLead[] | null>>;
 }) {
   const statusDisponiveis = [
     "Cliente Potencial",
     "Dados Confirmados",
     "Análise do Lead",
   ];
-  const statusNum = statusDisponiveis.findIndex((s) => s === status);
 
-  const [num, setNum] = useState(statusNum);
+  const [num, setNum] = useState(0);
+  useEffect(() => {
+    setNum(statusDisponiveis.findIndex((s) => s === status));
+  }, [status]);
 
   return (
     <div
@@ -92,13 +107,34 @@ function LinhaLead({
         idx % 2 === 0 ? "leads-linha-conteudo-impar" : ""
       }`}
     >
-      <LeadSlot id={id} num={0} setNum={setNum}>
+      <LeadSlot
+        id={id}
+        num={0}
+        nome={nome}
+        emailUsuario={emailUsuario}
+        setNum={setNum}
+        setLeads={setLeads}
+      >
         {num === 0 ? <Lead id={id} status={num} nome={nome} /> : null}
       </LeadSlot>
-      <LeadSlot id={id} num={1} setNum={setNum}>
+      <LeadSlot
+        id={id}
+        num={1}
+        nome={nome}
+        emailUsuario={emailUsuario}
+        setNum={setNum}
+        setLeads={setLeads}
+      >
         {num === 1 ? <Lead id={id} status={num} nome={nome} /> : null}
       </LeadSlot>
-      <LeadSlot id={id} num={2} setNum={setNum}>
+      <LeadSlot
+        id={id}
+        num={2}
+        nome={nome}
+        emailUsuario={emailUsuario}
+        setNum={setNum}
+        setLeads={setLeads}
+      >
         {num === 2 ? <Lead id={id} status={num} nome={nome} /> : null}
       </LeadSlot>
     </div>
@@ -111,12 +147,18 @@ function LeadSlot({
   setNum,
   num,
   id,
+  nome,
+  emailUsuario,
+  setLeads,
 }: {
   style?: React.CSSProperties;
   children?: React.ReactNode;
   setNum: React.Dispatch<React.SetStateAction<number>>;
   num: number;
   id: number;
+  nome: string;
+  emailUsuario: string;
+  setLeads: React.Dispatch<React.SetStateAction<TLead[] | null>>;
 }) {
   let accept: string | string[];
   if (num === 0) {
@@ -131,7 +173,11 @@ function LeadSlot({
     () => ({
       accept,
       drop: () => {
-        setNum(num);
+        setConfirma({
+          nome,
+          novo: num,
+        });
+        confirmaRef.current?.showModal();
       },
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
@@ -148,17 +194,35 @@ function LeadSlot({
     backgroundColor = "#2798ba";
   }
 
+  const confirmaRef = useRef<HTMLDialogElement | null>(null);
+  const [confirma, setConfirma] = useState({ nome: "", novo: 0 });
+  const fecharConfirma = () => {
+    confirmaRef.current?.close();
+  };
+
   return (
-    <div
-      ref={drop}
-      className="leads-slot"
-      style={{
-        backgroundColor,
-        ...style,
-      }}
-    >
-      {children}
-    </div>
+    <>
+      <dialog ref={confirmaRef} style={{ border: "none" }}>
+        <ModalConfirma
+          nome={confirma.nome}
+          novo={confirma.novo}
+          fechar={fecharConfirma}
+          id={id}
+          emailUsuario={emailUsuario}
+          setLeads={setLeads}
+        />
+      </dialog>
+      <div
+        ref={drop}
+        className="leads-slot"
+        style={{
+          backgroundColor,
+          ...style,
+        }}
+      >
+        {children}
+      </div>
+    </>
   );
 }
 

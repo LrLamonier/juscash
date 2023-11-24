@@ -14,9 +14,11 @@ export interface DadosLead {
   oportunidades: Oportunidades;
 }
 
+type TStatus = "Cliente Potencial" | "Dados Confirmados" | "Análise do Lead";
+
 export interface TLead extends DadosLead {
   id: number;
-  status: "Cliente Potencial" | "Dados Confirmados" | "Análise do Lead";
+  status: TStatus;
 }
 
 export interface Login {
@@ -83,9 +85,6 @@ function lead({
   const leadsAtuais = getLocal<TLead>("leads");
 
   if ("emailAutor" in request) {
-    const ih = getLocal<TLead>("leads").filter(
-      (lead) => lead.emailUsuario === request.emailAutor
-    );
     return getLocal<TLead>("leads").filter(
       (lead) => lead.emailUsuario === request.emailAutor
     ) as TLead[];
@@ -102,7 +101,7 @@ function lead({
 
     localStorage.setItem("leads", JSON.stringify(leadsAtuais));
 
-    return { status: 201, novaLead };
+    return { status: 201, leadsAtualizados: leadsAtuais };
   }
 
   const status = ["Cliente Potencial", "Dados Confirmados", "Análise do Lead"];
@@ -150,7 +149,7 @@ function lead({
   return {
     status: 200,
     message: "Status da lead alterado com sucesso.",
-    novaLead,
+    leadsAtualizados: novasLeads,
   };
 }
 
@@ -199,4 +198,45 @@ async function cadastro({
 
 export async function fazerLogout() {
   return { status: 200 };
+}
+
+export async function atualizarStatus(emailUsuario: string, id: number) {
+  const statusDisponiveis: TStatus[] = [
+    "Cliente Potencial",
+    "Dados Confirmados",
+    "Análise do Lead",
+  ];
+
+  const leads = getLocal<TLead>("leads");
+
+  const leadsUsuario = leads.filter((l) => l.emailUsuario === emailUsuario);
+
+  const leadAlvo = leadsUsuario.find((l) => l.id === id);
+
+  const statusNum = statusDisponiveis.findIndex((s) => s === leadAlvo?.status);
+
+  if (!leadAlvo || statusNum === 2) {
+    return null;
+  }
+
+  const novasLeadsUsuario: TLead[] = leadsUsuario.map((l) => {
+    if (l.id !== id) {
+      return l;
+    }
+    return {
+      ...l,
+      status: statusDisponiveis[statusNum + 1],
+    };
+  });
+
+  console.log({ leadsUsuario, novasLeadsUsuario });
+
+  const novasLeadsGeral = [
+    ...novasLeadsUsuario,
+    ...leads.filter((l) => l.emailUsuario !== emailUsuario),
+  ];
+
+  localStorage.setItem("leads", JSON.stringify(novasLeadsGeral));
+
+  return novasLeadsUsuario;
 }
