@@ -10,6 +10,7 @@ import Leads from "./pages/Leads";
 import "./App.css";
 import { store } from "./store/store";
 import { obterLeadsUsuario, TLead } from "./utils/backend";
+import FormLogin from "./components/FormLogin";
 
 type TResposta = { status: number; leadsAtualizados: TLead[] };
 
@@ -42,13 +43,13 @@ const router = createBrowserRouter(
         },
         {
           path: "*",
-          element: <Home />,
+          element: <FormLogin setSearch={() => {}} />,
         },
       ],
     },
   ],
   {
-    basename: "/juscash/",
+    basename: "/juscash",
   }
 );
 

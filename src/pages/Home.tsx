@@ -8,16 +8,16 @@ import FormSignUp from "../components/FormSignUp";
 export default function Home() {
   const [search, setSearch] = useSearchParams();
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const semLogin = async () => {
-    const res = await acessoLS({
-      email: "lucas@lucas.com",
-      senha: "asdf1234$",
-    });
-    dispatch(login((res as any).usuario));
-    navigate("/leads");
-  };
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
+  // const semLogin = async () => {
+  //   const res = await acessoLS({
+  //     email: "lucas@lucas.com",
+  //     senha: "asdf1234$",
+  //   });
+  //   dispatch(login((res as any).usuario));
+  //   navigate("/leads");
+  // };
 
   return (
     <main>
@@ -26,7 +26,6 @@ export default function Home() {
       ) : (
         <FormSignUp setSearch={setSearch} />
       )}
-      <button onClick={semLogin}>Acessar sem login.</button>
     </main>
   );
 }

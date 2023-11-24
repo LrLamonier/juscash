@@ -120,7 +120,7 @@ export default function FormSignUp({
       return;
     }
 
-    navigate("/leads");
+    navigate("leads");
   };
 
   return (
