@@ -14,7 +14,7 @@
 
 ---
 
-#### 1. Otimização de SEO
+#### 1 - Otimização de SEO
 
 Com o objetivo de impulsionar a presença online da aplicação nos mecanismos de busca, utilizei, além das tags meta no `<head>`, tags específicas do [Open Graph Protocol](https://ogp.me/) e de geração de [cards do Twitter](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup). Essas tags permitem que informações personalizadas sobre a página sejam exibidas quando o link é compartilhado. As imagens abaixo são prévias de como o link aparece quando compartilhado em diversas redes sociais.
 
@@ -29,7 +29,7 @@ Com o objetivo de impulsionar a presença online da aplicação nos mecanismos d
 
 ---
 
-### 2. Quickstart
+### 2 - Quickstart
 
 Este projeto foi desenvolvido com React, TypeScript e [Vite](https://vitejs.dev/). Para rodar o projeto localmente:
 
@@ -41,18 +41,22 @@ Este projeto foi desenvolvido com React, TypeScript e [Vite](https://vitejs.dev/
 
 ---
 
-### 3. Considerações gerais
+### 3 - Considerações gerais
 
-#### 3.1 Back end
+#### 3.1 - Back end
 
 Nas orientações do teste constam apenas as telas de criação de conta, dos leads do usuário e o modal de criação/exibição de lead. Utilizando o `localstorage` como "back end", implementei também a funcionalidade de login e persistência dos leads por usuário.
 
 Para isso, criei funções básicas que simulam o comportamento de um back end e estabelecendo uma camada entre a aplicação e o `localstorage`/banco de dados.
 
-#### 3.2 Validação dos formulários
+#### 3.2 - Validação dos formulários
 
 Para garantir uma experiência de usuário eficaz, os campos dos formulários são validados individualmente. Os campos com erro ficam destacados e o usuário é notificado sobre o que aconteceu. Ao tentar criar uma conta com um email já cadastrado, por exemplo, o erro especifica que o email já está em uso.
 
 Outra característica importante é que, ao interagir com um campo marcado como erro, a marcação desaparece, reforçando para o usuário que foi feita uma alteração. Tal situação pode ser observada nas imagens a seguir.
 
-![Formulário com erro](./readme/07-form.png)
+<img src="./readme//07-form.png" alt="Formulário com erro" width="600" >
+
+#### 3.3 - Autenticação
+
+Os leads salvos no `localstorage` possuem uma id única e a informação de qual perfil

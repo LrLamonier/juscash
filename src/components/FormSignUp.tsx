@@ -5,6 +5,8 @@ import acessoLS from "../utils/backend";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 import logo from "../assets/logo-white.svg";
+import { useDispatch } from "react-redux";
+import { login } from "../store/slices/sliceUsuario";
 
 type Fn = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
 
@@ -13,6 +15,7 @@ export default function FormSignUp({
 }: {
   setSearch: SetURLSearchParams;
 }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const nomeRef = useRef<HTMLInputElement>(null);
@@ -120,7 +123,9 @@ export default function FormSignUp({
       return;
     }
 
-    navigate("leads");
+    dispatch(login({ email: email!, senha: senha!, nome: nome! }));
+
+    navigate("/leads");
   };
 
   return (
