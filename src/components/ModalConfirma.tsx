@@ -1,4 +1,4 @@
-import acessoLS, { TLead, atualizarStatus } from "../utils/acessoLS";
+import acessoLS, { TLead, atualizarStatus } from "../utils/backend";
 
 type TResposta = { status: number; message: string; leadsAtualizados: TLead[] };
 

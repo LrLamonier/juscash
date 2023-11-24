@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import acessoLS, { TLead } from "../utils/acessoLS";
+import { TLead } from "../utils/backend";
 import { FaPlus } from "react-icons/fa6";
 import TabelaLeads from "../components/TabelaLeads";
 import ModalLead from "../components/ModalLead";

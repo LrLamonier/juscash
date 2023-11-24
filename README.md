@@ -1,6 +1,37 @@
 # Processo seletivo - JusCash
-### Lucas Ramos Lamonier
+#### Lucas Ramos Lamonier
 | [lucasrlamonier@gmail.com](mailto:lucasrlamonier@gmail.com) | [LucasLamonier.com/](https://www.lucaslamonier.com/) |
 | ---- | ----- |
 [GitHub.com/LrLamonier](https://github.com/LrLamonier/) | [LinkedIn.com/in/Lamonier/](https://www.linkedin.com/in/lamonier/) |
 | [WhatsApp: (62) 98164-4181](https://wa.me/5562981644181)
+
+### Sumário
+
+[1. Quickstart](#1-quickstart)
+2. Instalação
+
+---
+
+### 1. Quickstart
+
+Este projeto foi desenvolvido com React, TypeScript e [Vite](https://vitejs.dev/). Para rodar o projeto localmente:
+
+1. [Clone](https://docs.github.com/pt/repositories/creating-and-managing-repositories/cloning-a-repository) o repositório ou faça o download dos arquivos.
+2. Em um terminal na pasta raiz do projeto e com [Node e NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) instalados, execute `npm install`.
+3. Ao final da instalação, execute `npm run dev`.
+4. Verifique no console em qual porta do `localhost` a aplicação está disponível. Por padrão é `http://localhost:5173`.
+5. Para gerar uma build para produção, execute `npm run build`.
+
+---
+
+### 2. Otimização
+
+#### 2.1 SEO
+
+Com o objetivo de impulsionar a presença online da aplicação nos mecanismos de busca, utilizei, além das tags meta no `<head>`, tags específicas do [Open Graph Protocol](https://ogp.me/) e de geração de [cards do Twitter](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup). Essas tags permitem que informações personalizadas sobre a página sejam exibidas quando o link é compartilhado. As imagens abaixo são prévias de como o link aparece quando compartilhado em diversas redes sociais.
+
+#### 2.2 "Back end"
+
+Nas orientações do teste constam apenas as telas de criação de conta, dos leads do usuário e o modal de criação/exibição de lead. Utilizando o `localstorage` como "back end", implementei também a funcionalidade de login e persistência dos leads por usuário.
+
+Para isso, criei funções básicas que simulam o comportamento de um back end e estabelecendo uma camada entre a aplicação e o `localstorage`/banco de dados.

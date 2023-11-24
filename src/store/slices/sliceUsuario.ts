@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Usuario } from "../../utils/acessoLS";
+import { Usuario } from "../../utils/backend";
 
 const logadoInicial: { usuario: Usuario | null } = { usuario: null };
 

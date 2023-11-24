@@ -3,7 +3,7 @@ import { SetURLSearchParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import isEmail from "validator/lib/isEmail";
 import { login } from "../store/slices/sliceUsuario";
-import acessoLS, { Usuario } from "../utils/acessoLS";
+import acessoLS, { Usuario } from "../utils/backend";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 import logo from "../assets/logo-white.svg";

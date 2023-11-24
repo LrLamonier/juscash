@@ -240,3 +240,8 @@ export async function atualizarStatus(emailUsuario: string, id: number) {
 
   return novasLeadsUsuario;
 }
+
+export async function obterLeadsUsuario(emailUsuario: string) {
+  const leads = getLocal<TLead>("leads");
+  return leads.filter((l) => l.emailUsuario === emailUsuario);
+}

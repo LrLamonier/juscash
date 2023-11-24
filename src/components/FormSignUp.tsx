@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { SetURLSearchParams, useNavigate } from "react-router-dom";
 import isEmail from "validator/lib/isEmail";
-import acessoLS from "../utils/acessoLS";
+import acessoLS from "../utils/backend";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 import logo from "../assets/logo-white.svg";

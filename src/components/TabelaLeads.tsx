@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDrag, useDrop, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { TLead } from "../utils/acessoLS";
+import { TLead } from "../utils/backend";
 import { MdOutlineDragIndicator } from "react-icons/md";
 import ModalConfirma from "./ModalConfirma";
 

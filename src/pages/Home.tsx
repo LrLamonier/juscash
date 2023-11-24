@@ -1,7 +1,7 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../store/slices/sliceUsuario";
-import acessoLS from "../utils/acessoLS";
+import acessoLS from "../utils/backend";
 import FormLogin from "../components/FormLogin";
 import FormSignUp from "../components/FormSignUp";
 

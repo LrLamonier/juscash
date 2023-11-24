@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import isEmail from "validator/lib/isEmail";
-import acessoLS, { DadosLead, Oportunidades, TLead } from "../utils/acessoLS";
+import acessoLS, { DadosLead, Oportunidades, TLead } from "../utils/backend";
 
 type Fn = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
 type TResposta = { status: number; leadsAtualizados: TLead[] };

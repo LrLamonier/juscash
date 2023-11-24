@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TLead } from "../../utils/acessoLS";
+import { TLead } from "../../utils/backend";
 
 const leadsIniciais: TLead[] = [];
 

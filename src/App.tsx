@@ -9,18 +9,18 @@ import Leads from "./pages/Leads";
 
 import "./App.css";
 import { store } from "./store/store";
-import acessoLS, { TLead } from "./utils/acessoLS";
+import { obterLeadsUsuario, TLead } from "./utils/backend";
 
 type TResposta = { status: number; leadsAtualizados: TLead[] };
 
 const leadsLoader = async () => {
-  const emailAutor = store.getState().logado.usuario?.email;
-  if (!emailAutor) {
+  const emailUsuario = store.getState().logado.usuario?.email;
+  if (!emailUsuario) {
     return redirect("/");
   }
   let leads;
   try {
-    leads = await acessoLS({ emailAutor });
+    leads = await obterLeadsUsuario(emailUsuario);
   } catch {}
   return leads;
 };
